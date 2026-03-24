@@ -5,7 +5,7 @@ Agent wrapper for [bubblewrap](https://github.com/containers/bubblewrap). Run AI
 ## Install
 
 ```bash
-pip install agentbubble
+uv tool install agentbubble
 ```
 
 ## Usage
