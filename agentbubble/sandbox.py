@@ -1,11 +1,8 @@
 """Compose bubblewrap (bwrap) commands for sandboxed execution."""
 
-import os
 from pathlib import Path
 
-
-def _home() -> str:
-    return os.environ.get("HOME", str(Path.home()))
+from agentbubble.config import CONFIG_FILENAME
 
 
 # System directories to bind read-only
@@ -55,7 +52,7 @@ ABSOLUTE_RO_TRY_BINDS = [
 
 def build_bwrap_command(
     command: list[str],
-    project_dir: str | None = None,
+    project_dir: str | Path | None = None,
     network: bool = True,
     mask_files: list[str] | None = None,
     extra_ro_binds: list[str] | None = None,
@@ -74,10 +71,8 @@ def build_bwrap_command(
     Returns:
         Complete bwrap command as a list of strings.
     """
-    if project_dir is None:
-        project_dir = os.getcwd()
-
-    home = _home()
+    project = Path(project_dir) if project_dir else Path.cwd()
+    home = Path.home()
     cmd: list[str] = ["bwrap"]
 
     # System read-only binds
@@ -86,7 +81,7 @@ def build_bwrap_command(
 
     # Home directory read-only binds (try, so missing paths don't fail)
     for rel_path in HOME_RO_BINDS:
-        full = os.path.join(home, rel_path)
+        full = str(home / rel_path)
         cmd.extend(["--ro-bind-try", full, full])
 
     # Absolute read-only try binds
@@ -98,11 +93,11 @@ def build_bwrap_command(
         cmd.extend(["--ro-bind-try", path, path])
 
     # Project directory read-write
-    cmd.extend(["--bind", project_dir, project_dir])
+    cmd.extend(["--bind", str(project), str(project)])
 
     # Home directory read-write binds
     for rel_path in HOME_RW_BINDS:
-        full = os.path.join(home, rel_path)
+        full = str(home / rel_path)
         cmd.extend(["--bind-try", full, full])
 
     # Extra read-write binds
@@ -122,14 +117,20 @@ def build_bwrap_command(
     cmd.extend([
         "--unshare-pid",
         "--die-with-parent",
-        "--chdir", project_dir,
+        "--chdir", str(project),
     ])
+
+    # Mask config files so the agent can't read them
+    project_config = project / CONFIG_FILENAME
+    global_config = home / ".config/agentbubble/config.toml"
+    for cfg in [project_config, global_config]:
+        cmd.extend(["--ro-bind-try", "/dev/null", str(cfg)])
 
     # Mask files (bind /dev/null over them)
     for mask in mask_files or []:
-        if not os.path.isabs(mask):
-            mask = os.path.join(project_dir, mask)
-        cmd.extend(["--ro-bind", "/dev/null", mask])
+        p = Path(mask)
+        mask_path = p if p.is_absolute() else project / mask
+        cmd.extend(["--ro-bind", "/dev/null", str(mask_path)])
 
     # The command to execute
     cmd.extend(command)

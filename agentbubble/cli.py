@@ -2,7 +2,6 @@
 
 import argparse
 import os
-import sys
 
 from agentbubble.config import load_config
 from agentbubble.sandbox import build_bwrap_command
@@ -23,7 +22,7 @@ def main() -> None:
         help="Disable network access in sandbox",
     )
     parser.add_argument(
-        "--mask-env",
+        "--mask-file",
         action="append",
         default=[],
         metavar="FILE",
@@ -41,7 +40,7 @@ def main() -> None:
 
     # Strip leading '--' if present
     command = args.command
-    if command and command[0] == "--":
+    if command[0] == "--":
         command = command[1:]
 
     cfg = load_config(args.project_dir)
@@ -50,7 +49,7 @@ def main() -> None:
         command=command,
         project_dir=args.project_dir,
         network=not args.no_network,
-        mask_files=args.mask_env + cfg.mask,
+        mask_files=args.mask_file + cfg.mask,
         extra_ro_binds=cfg.ro_bind,
         extra_rw_binds=cfg.rw_bind,
     )

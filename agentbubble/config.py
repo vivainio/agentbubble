@@ -4,10 +4,7 @@ import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
-if hasattr(__builtins__, "__import__"):
-    import tomllib
-else:
-    import tomllib
+import tomllib
 
 
 CONFIG_FILENAME = ".agentbubble.toml"
@@ -51,9 +48,7 @@ def load_config(project_dir: str | None = None) -> SandboxConfig:
     global_path = Path(_expand_path("~/.config/agentbubble/config.toml"))
     global_cfg = _parse_sandbox_section(_load_toml(global_path))
 
-    if project_dir is None:
-        project_dir = os.getcwd()
-    project_path = Path(project_dir) / CONFIG_FILENAME
+    project_path = Path(project_dir or os.getcwd()) / CONFIG_FILENAME
     project_cfg = _parse_sandbox_section(_load_toml(project_path))
 
     return SandboxConfig(
