@@ -1,0 +1,15 @@
+[project]
+name = "agentbubble"
+version = "0.1.0"
+description = "Agent wrapper for bubblewrap"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [{ name = "Ville M. Vainio", email = "vivainio@gmail.com" }]
+
+[project.scripts]
+agentbubble = "agentbubble.cli:main"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
