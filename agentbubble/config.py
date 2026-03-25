@@ -17,6 +17,7 @@ class SandboxConfig:
     ro_bind: list[str] = field(default_factory=list)
     rw_bind: list[str] = field(default_factory=list)
     mask: list[str] = field(default_factory=list)
+    bwrap_args: list[str] = field(default_factory=list)
 
 
 def _expand_path(p: str) -> str:
@@ -29,6 +30,7 @@ def _parse_sandbox_section(data: dict) -> SandboxConfig:
         ro_bind=[_expand_path(p) for p in section.get("ro_bind", [])],
         rw_bind=[_expand_path(p) for p in section.get("rw_bind", [])],
         mask=list(section.get("mask", [])),
+        bwrap_args=list(section.get("bwrap_args", [])),
     )
 
 
@@ -77,4 +79,5 @@ def load_config(project_dir: str | None = None) -> SandboxConfig:
         ro_bind=global_cfg.ro_bind + project_cfg.ro_bind + profile_ro,
         rw_bind=global_cfg.rw_bind + project_cfg.rw_bind + profile_rw,
         mask=global_cfg.mask + project_cfg.mask,
+        bwrap_args=global_cfg.bwrap_args + project_cfg.bwrap_args,
     )

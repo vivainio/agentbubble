@@ -46,6 +46,7 @@ def build_bwrap_command(
     mask_files: list[str] | None = None,
     extra_ro_binds: list[str] | None = None,
     extra_rw_binds: list[str] | None = None,
+    extra_bwrap_args: list[str] | None = None,
 ) -> list[str]:
     """Build a bwrap command line.
 
@@ -120,6 +121,9 @@ def build_bwrap_command(
         p = Path(mask)
         mask_path = p if p.is_absolute() else project / mask
         cmd.extend(["--ro-bind", "/dev/null", str(mask_path)])
+
+    # Extra bwrap args (passthrough from config)
+    cmd.extend(extra_bwrap_args or [])
 
     # The command to execute
     cmd.extend(command)

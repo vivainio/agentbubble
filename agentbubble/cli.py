@@ -61,6 +61,7 @@ def main() -> None:
         mask_files=args.mask_file + cfg.mask,
         extra_ro_binds=cfg.ro_bind,
         extra_rw_binds=cfg.rw_bind,
+        extra_bwrap_args=cfg.bwrap_args,
     )
 
     if args.verbose:
@@ -78,6 +79,7 @@ def main() -> None:
         _yaml_list("ro_bind", cfg.ro_bind)
         _yaml_list("rw_bind", cfg.rw_bind)
         _yaml_list("mask", mask_files)
+        _yaml_list("bwrap_args", cfg.bwrap_args)
         _yaml_list("command", command)
         print(f"network: {not args.no_network}")
         print(f"project_dir: {args.project_dir}")
