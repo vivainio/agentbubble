@@ -37,6 +37,26 @@ Project config is merged with global config. Paths support `~` and `$ENV_VAR` ex
 
 Config files are automatically masked inside the sandbox.
 
+## Profiles
+
+Profiles are named sets of bind mounts for common agent toolchains. All profiles are active by default when no config file is present. To enable only specific profiles, set the top-level `profiles` key in either config file:
+
+```toml
+profiles = ["copilot", "claude"]
+```
+
+The union of profiles listed in the global and project configs is used.
+
+### Built-in profiles
+
+| Profile | Binds |
+|---------|-------|
+| `copilot` | `~/.copilot`, `~/.config/.copilot`, `~/.config/gh`, `~/.cache/Microsoft`, `~/.cache/gh` (rw) |
+| `claude` | `~/.claude` (ro) |
+| `skills` | Resolves symlink targets in `~/.claude/skills/` and binds them (ro) |
+| `gh` | `~/.config/gh`, `~/.cache/gh` (rw) |
+| `node` | `~/.nvm`, `~/.local/share/fnm`, `/run/user/1000/fnm_multishells` (ro) |
+
 ## Credits
 
 Inspired by [Jussi Heikkilä's bubblewrap_copilot script](https://github.com/jussih/dotfiles/blob/master/stow/scripts/.local/bin/bubblewrap_copilot).

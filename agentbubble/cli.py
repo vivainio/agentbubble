@@ -12,6 +12,11 @@ def main() -> None:
         description="Run commands in a bubblewrap sandbox",
     )
     parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="Print the bwrap command before executing",
+    )
+    parser.add_argument(
         "--project-dir",
         default=os.getcwd(),
         help="Project directory to bind read-write (default: cwd)",
@@ -43,6 +48,10 @@ def main() -> None:
     if command[0] == "--":
         command = command[1:]
 
+    # Convenience aliases
+    if command[0] == "yolopilot":
+        command = ["copilot", "--allow-all"] + command[1:]
+
     cfg = load_config(args.project_dir)
 
     cmd = build_bwrap_command(
@@ -53,5 +62,9 @@ def main() -> None:
         extra_ro_binds=cfg.ro_bind,
         extra_rw_binds=cfg.rw_bind,
     )
+
+    if args.verbose:
+        import shlex
+        print(shlex.join(cmd))
 
     os.execvp(cmd[0], cmd)

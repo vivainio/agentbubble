@@ -26,9 +26,6 @@ HOME_RO_BINDS = [
     ".local/share/uv",
     ".local/bin",
     ".ssh/known_hosts",
-    ".nvm",
-    ".claude/skills",
-    ".local/share/fnm",
 ]
 
 # Paths relative to $HOME to bind read-write (using --bind-try)
@@ -36,18 +33,10 @@ HOME_RW_BINDS = [
     ".cache/uv",
     ".cache/pip",
     ".npm",
-    # Copilot / GH CLI credentials and caches
-    ".copilot",
-    ".config/.copilot",
-    ".config/gh",
-    ".cache/Microsoft",
-    ".cache/gh",
 ]
 
 # Absolute paths to try binding read-only
-ABSOLUTE_RO_TRY_BINDS = [
-    "/run/user/1000/fnm_multishells",
-]
+ABSOLUTE_RO_TRY_BINDS: list[str] = []
 
 
 def build_bwrap_command(
