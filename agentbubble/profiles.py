@@ -32,7 +32,7 @@ ALL_PROFILE_NAMES: list[str] = list(BUILTIN_PROFILES)
 
 
 def _claude_skill_targets(home: Path) -> list[str]:
-    """Return unique real paths of symlink targets in ~/.claude/skills/."""
+    """Return unique parent dirs (if path contains 'skill') of symlink targets in ~/.claude/skills/."""
     skills_dir = home / ".claude" / "skills"
     if not skills_dir.is_dir():
         return []
@@ -40,7 +40,12 @@ def _claude_skill_targets(home: Path) -> list[str]:
     for entry in skills_dir.iterdir():
         try:
             target = entry.resolve()
-            if target.exists():
+            if not target.exists():
+                continue
+            parent = target.parent
+            if "skill" in str(parent).lower():
+                seen[str(parent)] = None
+            else:
                 seen[str(target)] = None
         except OSError:
             pass
