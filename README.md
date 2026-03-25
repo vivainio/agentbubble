@@ -32,7 +32,10 @@ ro_bind = [
 rw_bind = [
     "~/.cache/some-agent",
 ]
-mask = [".env", ".env.local"]
+mask = [
+    ".env",
+    ".env.local",
+]
 ```
 
 Project config is merged with global config. Paths support `~` and `$ENV_VAR` expansion.
@@ -44,7 +47,10 @@ Config files are automatically masked inside the sandbox.
 Profiles are named sets of bind mounts for common agent toolchains. All profiles are active by default when no config file is present. To enable only specific profiles, set the top-level `profiles` key in either config file:
 
 ```toml
-profiles = ["copilot", "claude"]
+profiles = [
+    "copilot",
+    "claude",
+]
 ```
 
 The union of profiles listed in the global and project configs is used.
