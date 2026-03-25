@@ -65,6 +65,22 @@ def main() -> None:
 
     if args.verbose:
         import shlex
-        print(shlex.join(cmd))
+        mask_files = args.mask_file + cfg.mask
+
+        def _yaml_list(label: str, items: list[str]) -> None:
+            print(f"{label}:")
+            if items:
+                for item in items:
+                    print(f"  - {item}")
+            else:
+                print("  []")
+
+        _yaml_list("ro_bind", cfg.ro_bind)
+        _yaml_list("rw_bind", cfg.rw_bind)
+        _yaml_list("mask", mask_files)
+        _yaml_list("command", command)
+        print(f"network: {not args.no_network}")
+        print(f"project_dir: {args.project_dir}")
+        print()
 
     os.execvp(cmd[0], cmd)
