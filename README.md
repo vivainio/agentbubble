@@ -55,7 +55,7 @@ The union of profiles listed in the global and project configs is used.
 |---------|-------|
 | `copilot` | `~/.copilot`, `~/.config/.copilot`, `~/.config/gh`, `~/.cache/Microsoft`, `~/.cache/gh` (rw) |
 | `claude` | `~/.claude` (ro) |
-| `skills` | Resolves symlink targets in `~/.claude/skills/` and binds them (ro) |
+| `skills` | `~/.cache/skillset/repos` (ro) + resolves symlink targets in `~/.claude/skills/` (ro) |
 | `gh` | `~/.config/gh`, `~/.cache/gh` (rw) |
 | `node` | `~/.nvm`, `~/.local/share/fnm`, `/run/user/1000/fnm_multishells` (ro) |
 

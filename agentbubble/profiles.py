@@ -18,7 +18,7 @@ BUILTIN_PROFILES: dict[str, ProfileDef] = {
     "claude": ProfileDef(
         home_ro=[".claude"],
     ),
-    "skills": ProfileDef(),  # dynamic: resolved via _claude_skill_targets
+    "skills": ProfileDef(home_ro=[".cache/skillset/repos"]),  # + dynamic symlink targets
     "gh": ProfileDef(
         home_rw=[".config/gh", ".cache/gh"],
     ),
