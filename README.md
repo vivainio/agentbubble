@@ -13,9 +13,11 @@ uv tool install agentbubble
 ```bash
 agentbubble -- copilot
 agentbubble -- claude
+agentbubble -- yolopilot                          # copilot --allow-all
 agentbubble --mask-file .env --mask-file .env.local -- copilot
 agentbubble --no-network -- python script.py
 agentbubble --project-dir /path/to/project -- claude
+agentbubble --verbose -- copilot                  # print bwrap command before running
 ```
 
 ## Configuration
